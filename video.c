@@ -1,37 +1,39 @@
 #include <string.h>
+#include <stdio.h>
 #include "config/video.h"
 
 // Parameters:
 //   w: width of the image
-//   h: height of the image
-//   durationMovie: duration in seconds of the color section
-//   durationCredits: duration in seconds of the black-and-white section
-//   fps: Frames Per Second
-//   unit: Unit of the output value. It could be 'bt' bytes, 'ko' kilobytes, 'mo' megabytes, 'go' gigabytes
-// Return value:
-//   total video size (based on the unit passed parameter)
+//   h: height of the imag
+//   durationMovie: duration in seconds of the movie (colored image)
+//   durationCredits: duration in seconds of credits (black/white image)
+//   unit: Unit of the output value. It could be 'bt' for bytes, 'ko' for kilobits, 'mo' for megabits, 'go' for gigabits
+// Return value
+//   colored video size (based on the unit passed parameter)
 float video(int w, int h, int durationMovie, int durationCredits, int fps, char* unit) {
-    // Taille d'une frame couleur et noir & blanc
-    float colorFrameSize = (float)(w * h * 3); // En octets
-    float bwFrameSize = (float)(w * h);       // En octets
+    // Bits per pixel for colored image (24 bits)
+    float bitsPerPixel = 24;
 
-    // Nombre total de frames
-    int totalColorFrames = durationMovie * fps;
-    int totalBWFrames = durationCredits * fps;
+    float clrImage = w * h * bitsPerPixel * durationMovie * fps;
+    float BImage = w * h * durationCredits * fps;
+    float sizeInBits = clrImage + BImage; // Add to total size in bits
+    float size;
 
-    // Taille totale en octets
-    float totalSizeInBytes = (totalColorFrames * colorFrameSize) + (totalBWFrames * bwFrameSize);
 
-    // Conversion en fonction de l'unité
+
+    // Convert size based on the requested unit
     if (strcmp(unit, "bt") == 0) {
-        return totalSizeInBytes;
+        size = sizeInBits; // Convert to bytes
     } else if (strcmp(unit, "ko") == 0) {
-        return totalSizeInBytes / 1024;
+        size = sizeInBits / (1024); // Convert to kilobits
     } else if (strcmp(unit, "mo") == 0) {
-        return totalSizeInBytes / (1024 * 1024);
+        size = sizeInBits / (1024 * 1024); // Convert to megabits
     } else if (strcmp(unit, "go") == 0) {
-        return totalSizeInBytes / (1024 * 1024 * 1024);
+        size = sizeInBits / (1024 * 1024 * 1024); // Convert to gigabits
     } else {
-        return -1; // Unité non valide
+        // If the unit is not recognized, return -1 or some error value
+        return -1.0f;
     }
+
+    return size / 8;
 }

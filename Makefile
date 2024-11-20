@@ -1,5 +1,5 @@
 test_grayScaleImage: 
-	cd config/; gcc  mainGrayScaleImage.c assert_with_message.c ../grayScaleImage.c -o ../result
+	cd config/ gcc  mainGrayScaleImage.c assert_with_message.c ../grayScaleImage.c -o ../result
 	./result
 
 test_ColoredBitmap: 

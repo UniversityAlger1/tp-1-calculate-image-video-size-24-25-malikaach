@@ -20,6 +20,6 @@ int main() {
     testMethod(500, 300, 60, 10, 20, "mo", 518.5604095);
     testMethod(500, 400, 10, 2, 1, "ko", 5908.203125);
 
-    printf("All tests passed for video size!\n");
+  
     return 0;
 }
